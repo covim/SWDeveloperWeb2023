@@ -15,6 +15,7 @@ namespace Wifi.SD.Core.Entities.Movies
         }
 
         [Key]
+        [MaxLength(8)]
         public virtual string Code { get; set; }
 
         [MaxLength(32), MinLength(2)]

@@ -19,7 +19,7 @@ namespace Wifi.SD.Core.Entities.Movies
 
         [Column(TypeName ="date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateOnly ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode =true, DataFormatString ="{0:N}")]
         public decimal Price { get; set; }
@@ -27,7 +27,7 @@ namespace Wifi.SD.Core.Entities.Movies
         public int GenreId { get; set; }
 
         [MaxLength(8)]
-        public string MediumTypeCode{ get; set;}
+        public string? MediumTypeCode{ get; set;}
 
 
     }

@@ -1,0 +1,7 @@
+zum anlegen der Datenbank
+
+Tools-> NugetPackageManager-> Console:
+		add-migration initial -startupproject SD.Persistence
+
+		add-migration irgendwasgeaendert -startupproject SD.Persistence
+		update-database -startupproject SD.Persistence

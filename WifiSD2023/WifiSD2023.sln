@@ -15,7 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{715126
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD.Core", "SD.Core\SD.Core.csproj", "{B0B7C372-F96F-41A6-9CE2-375C8E565C90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD.Persistence", "SD.Persistence\SD.Persistence.csproj", "{7A9E98A7-CAD5-45BF-B9AF-AD902926F795}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD.Persistence", "SD.Persistence\SD.Persistence.csproj", "{7A9E98A7-CAD5-45BF-B9AF-AD902926F795}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{DD0317A8-EF38-4F48-8249-CDD9CDEED446}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

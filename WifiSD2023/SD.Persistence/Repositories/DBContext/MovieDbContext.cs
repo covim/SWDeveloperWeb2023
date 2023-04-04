@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +47,9 @@ namespace SD.Persistence.Repositories.DBContext
             modelBuilder.Entity<Movie>()
                 .HasOne(m => m.MediumType)
                 .WithMany(m => m.Movies)
-                .HasForeignKey(m => m.MediumType.Code)
-                .OnDelete(DeleteBehavior.SetNull);  //löschweitergabe => Wert in Movie auf Null setzen
+                .HasForeignKey(m => m.MediumTypeCode)
+                .OnDelete(DeleteBehavior.SetNull) //löschweitergabe => Wert in Movie auf Null setzen
+                .IsRequired(false);  //Nullable
 
             //Foreign Key Constraint 1 : n
             modelBuilder.Entity<Genre>().ToTable(nameof(Genre) + "s")
@@ -70,7 +72,7 @@ namespace SD.Persistence.Repositories.DBContext
                 new MediumType { Code = "VHS", Name = "Videokasette" },
                 new MediumType { Code = "DVD", Name = "Digital Versatile Disk" },
                 new MediumType { Code = "BR", Name = "Blu-Ray" },
-                new MediumType { Code = "BR3", Name = "3d Blu-Ray" },
+                new MediumType { Code = "BR3D", Name = "3d Blu-Ray" },
                 new MediumType { Code = "BRHD", Name = "HD Blu-Ray" },
                 new MediumType { Code = "BR4K", Name = "4K Blu-Ray" }
                 );
@@ -78,11 +80,11 @@ namespace SD.Persistence.Repositories.DBContext
             modelBuilder.Entity<Movie>().HasData(
                 new Movie
                 {
-                    Id = new Guid("165bbd6d - d2de - 434b - a3fb - 908b8606df64"),
+                    Id = new Guid("165bbd6d-d2de-434b-a3fb-908b8606df64"),
                     Title = "Rambo",
                     Price = 4.9M,
                     MediumTypeCode = "VHS",
-                    ReleaseDate = new DateOnly(1985, 4, 3),
+                    ReleaseDate = new DateTime(1985, 4, 3),
                     GenreId = 1
 
                 },
@@ -93,7 +95,7 @@ namespace SD.Persistence.Repositories.DBContext
                     Title = "Star Trek - Beyond",
                     Price = 12.9M,
                     MediumTypeCode = "BR3D",
-                    ReleaseDate = new DateOnly(2016, 7, 1),
+                    ReleaseDate = new DateTime(2016, 7, 1),
                     GenreId = 3
 
                 },
@@ -104,7 +106,7 @@ namespace SD.Persistence.Repositories.DBContext
                     Title = "Star Wars - Episode IV",
                     Price = 9.9M,
                     MediumTypeCode = "DVD",
-                    ReleaseDate = new DateOnly(1987, 4, 13),
+                    ReleaseDate = new DateTime(1987, 4, 13),
                     GenreId = 3
 
                 },
@@ -115,7 +117,7 @@ namespace SD.Persistence.Repositories.DBContext
                     Title = "The Ring",
                     Price = 9.7M,
                     MediumTypeCode = "BR",
-                    ReleaseDate = new DateOnly(2005, 11, 15),
+                    ReleaseDate = new DateTime(2005, 11, 15),
                     GenreId = 2
 
                 }
@@ -123,5 +125,27 @@ namespace SD.Persistence.Repositories.DBContext
                 );
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+#if DEBUG
+            //Verzeichnis bin \bin kürzen
+            if (currentDirectory.IndexOf("bin") > -1)
+            {
+                currentDirectory = currentDirectory.Substring(0, currentDirectory.IndexOf("bin"));
+            }
+#endif
+
+            var configurationBuilder = new ConfigurationBuilder()
+                                            .SetBasePath(currentDirectory)
+                                            .AddJsonFile("AppSettings.json", optional: false, reloadOnChange: true);
+
+            var configuration = configurationBuilder.Build();
+            var connectionString = configuration.GetConnectionString(nameof(MovieDbContext));
+            optionsBuilder.UseSqlServer(connectionString, opts => opts.CommandTimeout(60));
+
+
+        }
     }
 }
