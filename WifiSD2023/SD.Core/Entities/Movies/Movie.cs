@@ -9,6 +9,8 @@ namespace Wifi.SD.Core.Entities.Movies
 {
     public class Movie : MovieBase, IEntity
     {
+
+        
         public Genre Genre { get; set; }
 
 

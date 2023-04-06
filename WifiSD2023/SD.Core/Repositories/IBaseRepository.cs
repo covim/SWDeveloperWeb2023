@@ -22,7 +22,7 @@ namespace Wifi.SD.Core.Repositories
 
         #region [R]EAD
 
-        IQueryable QueryFrom<T>(Expression<Func<T, bool>> whereFilter = null )
+        IQueryable<T> QueryFrom<T>(Expression<Func<T, bool>> whereFilter = null )
             where T : class, IEntity;
              
 

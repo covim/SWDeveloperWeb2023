@@ -8,6 +8,16 @@ using System.Threading.Tasks;
 
 namespace Wifi.SD.Core.Entities.Movies
 {
+    public enum Ratings : byte
+    {
+        VeryBad = 1,
+        Bad,
+        Medium,
+        Good,
+        VeryGood
+    }
+
+
     public abstract class MovieBase
     {
         [Key] // wäre hier nicht nötig das EF eine Guid mit name Id automatisch zum Primary Key macht
@@ -29,6 +39,6 @@ namespace Wifi.SD.Core.Entities.Movies
         [MaxLength(8)]
         public string? MediumTypeCode{ get; set;}
 
-
+        public Ratings? Rating { get; set; }
     }
 }

@@ -1,3 +1,9 @@
+singleton 
+on scope
+transcendent
+
+
+
 zum anlegen der Datenbank
 
 Tools-> NugetPackageManager-> Console:
