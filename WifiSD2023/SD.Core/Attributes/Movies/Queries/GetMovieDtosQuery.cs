@@ -12,9 +12,9 @@ namespace Wifi.SD.Core.Attributes.Movies.Queries
     public class GetMovieDtosQuery : IRequest<IEnumerable<MovieDto>>
     {
         public int? GenreId { get; set; }
-        public string MediumTypeCode { get; set; }
+        public string? MediumTypeCode { get; set; }
 
-        public List<Ratings> Ratings { get; set; }
+        public List<Ratings>? Ratings { get; set; }
 
         public int Take { get; set; }
         public int Skip { get; set; }
