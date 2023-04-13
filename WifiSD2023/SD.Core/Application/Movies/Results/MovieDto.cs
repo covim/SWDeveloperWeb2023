@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wifi.SD.Core.Entities.Movies;
 
-namespace Wifi.SD.Core.Attributes.Movies.Results
+namespace Wifi.SD.Core.Application.Movies.Results
 {
     /// <summary>
     /// Movie Data Transaction Object
@@ -25,7 +25,7 @@ namespace Wifi.SD.Core.Attributes.Movies.Results
                 Price = movie.Price,
                 Rating = movie.Rating,
                 ReleaseDate = movie.ReleaseDate,
-             };
+            };
         }
 
     }

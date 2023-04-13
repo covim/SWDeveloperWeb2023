@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
-using Wifi.SD.Core.Attributes.Movies.Queries;
-using Wifi.SD.Core.Attributes.Movies.Results;
+using System.Net;
+using Wifi.SD.Core.Application.Movies.Commands;
+using Wifi.SD.Core.Application.Movies.Queries;
+using Wifi.SD.Core.Application.Movies.Results;
 
 namespace SD.WS.Controllers
 {
@@ -11,16 +13,28 @@ namespace SD.WS.Controllers
     {
 
         [HttpGet(nameof(MovieDto))]
-        public async Task<IEnumerable<MovieDto>> GetMovieDtos([FromQuery] GetMovieDtosQuery query)
+        public async Task<IEnumerable<MovieDto>> GetMovieDtos([FromQuery] GetMovieDtosQuery query, CancellationToken cancellationToken)
         {
             return await base.Mediator.Send(query);
         }
 
 
         [HttpGet(nameof(MovieDto) + "/{Id}")]
-        public async Task<MovieDto> GetMovieDto([FromRoute] GetMovieDtoQuery query)
+        public async Task<MovieDto> GetMovieDto([FromRoute] GetMovieDtoQuery query, CancellationToken cancellationToken)
         {
             return await base.Mediator.Send(query);
+        }
+
+        [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.Created)]
+        [HttpPost(nameof(MovieDto))]
+        public async Task<MovieDto> CreateMovieDto(CancellationToken cancellationToken)
+        {
+            var createMovieDtoCommand = new CreateMovieDtoCommand();
+            var result = await base.Mediator.Send(createMovieDtoCommand);
+
+            base.SetLocationUri(result, result.Id.ToString());
+            return result;
+            
         }
 
     }

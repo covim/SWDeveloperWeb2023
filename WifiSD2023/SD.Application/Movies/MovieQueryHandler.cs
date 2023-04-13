@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wifi.SD.Core.Attributes;
-using Wifi.SD.Core.Attributes.Movies.Queries;
-using Wifi.SD.Core.Attributes.Movies.Results;
 using Wifi.SD.Core.Entities.Movies;
 using Wifi.SD.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Wifi.SD.Core.Application.Movies.Queries;
+using Wifi.SD.Core.Application.Movies.Results;
 
 namespace SD.Application.Movies
 {
@@ -69,11 +69,16 @@ namespace SD.Application.Movies
             {
                 movieQuery = movieQuery.Skip(request.Skip).Take(request.Take);  //Pager-Funktion in EF mit Linq
             }
-            
-            var movieDtos = new List<MovieDto>();
-            var movies = await movieQuery.ToListAsync(cancellationToken);
 
-            movies.ForEach(m => movieDtos.Add(MovieDto.MapFrom(m)));
+            // so 
+            var movieDtos = await movieQuery.Select(s => MovieDto.MapFrom(s)).ToListAsync(cancellationToken);
+            
+            /* oder
+            //var movieDtos = new List<MovieDto>();
+            //var movies = await movieQuery.ToListAsync(cancellationToken);
+
+            //movies.ForEach(m => movieDtos.Add(MovieDto.MapFrom(m)));
+            so */
 
             return movieDtos;
         }
