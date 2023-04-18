@@ -30,11 +30,31 @@ namespace SD.WS.Controllers
         public async Task<MovieDto> CreateMovieDto(CancellationToken cancellationToken)
         {
             var createMovieDtoCommand = new CreateMovieDtoCommand();
-            var result = await base.Mediator.Send(createMovieDtoCommand);
+            var result = await base.Mediator.Send(createMovieDtoCommand, cancellationToken);
 
             base.SetLocationUri(result, result.Id.ToString());
             return result;
             
+        }
+
+        [HttpPut(nameof(MovieDto) + "/{Id}")]
+        public async Task<MovieDto> UpdateMovieDto([FromRoute] Guid Id, [FromBody] MovieDto movieDto, CancellationToken cancellationToken)
+        {
+            var updateMovieDtoCommand = new UpdateMovieDtoCommand { Id = Id, MovieDto = movieDto };
+            
+            var result = await base.Mediator.Send(updateMovieDtoCommand, cancellationToken);
+            return result;
+
+        }
+
+        [HttpDelete(nameof(MovieDto) + "/{Id}")]
+        public async Task<bool> DeleteMovieDto([FromRoute] Guid Id, CancellationToken cancellationToken)
+        {
+            var deleteMovieDtoCommand = new DeleteMovieDtoCommand { Id = Id};
+
+            var result = await base.Mediator.Send(deleteMovieDtoCommand, cancellationToken);
+            return result;
+
         }
 
     }

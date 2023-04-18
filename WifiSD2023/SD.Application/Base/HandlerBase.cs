@@ -15,7 +15,7 @@ namespace SD.Application.Base
             var sourceType = source.GetType();
             var targetType = target.GetType();
 
-            if (sourceType.BaseType.FullName == targetType.BaseType.FullName)
+            if (sourceType.BaseType.FullName != targetType.BaseType.FullName)
             {
                 throw new ApplicationException("Base types are not matching");
             }

@@ -46,9 +46,9 @@ namespace Wifi.SD.Core.Repositories
         Task RemoveAsync<T>(T entity, bool saveImmediately = false, CancellationToken cancellationToken = default)
             where T : class, IEntity;
 
-        void Remove<T>(object key, bool saveImmediately = false) where T : class, IEntity;
+        void RemoveByKey<T>(object key, bool saveImmediately = false) where T : class, IEntity;
 
-        Task RemoveAsync<T>(object key, bool saveImmediately = false, CancellationToken cancellationToken = default)
+        Task RemoveAsyncByKey<T>(object key, bool saveImmediately = false, CancellationToken cancellationToken = default)
             where T : class, IEntity;
 
         #endregion

@@ -159,7 +159,7 @@ namespace SD.Persistence.Repositories.Base
             }
         }
 
-        public void Remove<T>(object key, bool saveImmediately = false)
+        public void RemoveByKey<T>(object key, bool saveImmediately = false)
             where T : class, IEntity
         {
             if (key == null)
@@ -187,7 +187,7 @@ namespace SD.Persistence.Repositories.Base
 
 
 
-        public async Task RemoveAsync<T>(object key, bool saveImmediately = false, CancellationToken cancellationToken = default)
+        public async Task RemoveAsyncByKey<T>(object key, bool saveImmediately = false, CancellationToken cancellationToken = default)
             where T : class, IEntity
         {
             if (key == null)
