@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using System.Net;
 using Wifi.SD.Core.Application.Movies.Commands;
@@ -9,6 +10,7 @@ namespace SD.WS.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class MovieController : MediatRBaseController
     {
 
