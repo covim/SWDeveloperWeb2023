@@ -13,6 +13,8 @@ namespace Wifi.SD.Core.Application.Movies.Results
     /// </summary>
     public class MovieDto : MovieBase
     {
+        private string genreName = string.Empty;
+        public string GenreName { get => this.genreName; }
 
         public static MovieDto MapFrom(Movie movie)
         {
@@ -25,6 +27,8 @@ namespace Wifi.SD.Core.Application.Movies.Results
                 Price = movie.Price,
                 Rating = movie.Rating,
                 ReleaseDate = movie.ReleaseDate,
+                genreName = movie.Genre?.Name ?? string.Empty,
+
             };
         }
 

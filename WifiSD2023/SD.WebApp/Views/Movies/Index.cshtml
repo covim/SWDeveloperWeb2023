@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Wifi.SD.Core.Entities.Movies.Movie>
+﻿@model IEnumerable<Wifi.SD.Core.Application.Movies.Results.MovieDto>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,16 +7,16 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">@BasicRes.CreateNewMovie</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Genre)
+                @BasicRes.Genre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MediumType)
+                @BasicRes.MediumType
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -37,10 +37,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Genre.Name)
+                @Html.DisplayFor(modelItem => item.GenreName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MediumType.Code)
+                @Html.DisplayFor(modelItem => item.MediumTypeCode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)

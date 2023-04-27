@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SD.Application.Extensions;
+using SD.Application.Movies;
 using SD.Persistence.Extensions;
 using SD.Persistence.Repositories.DBContext;
 using SD.WebApp.Data;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,9 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 
 builder.Services.RegisterApplicationServices();
 builder.Services.RegisterRepositories();
+
+// MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(MovieQueryHandler).GetTypeInfo().Assembly));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
