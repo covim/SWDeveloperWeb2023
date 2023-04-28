@@ -49,22 +49,6 @@ namespace SD.WebApp.Controllers
             var result = resultAll.Where(x => x.Id == id).FirstOrDefault();
             return View(result);
 
-
-            //if (id == null || _context.Movies == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var movie = await _context.Movies
-            //    .Include(m => m.Genre)
-            //    .Include(m => m.MediumType)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            //if (movie == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(movie);
         }
 
         // GET: Movies/Create
