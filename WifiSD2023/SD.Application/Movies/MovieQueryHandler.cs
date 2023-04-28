@@ -48,7 +48,7 @@ namespace SD.Application.Movies
         public async Task<IEnumerable<MovieDto>> Handle(GetMovieDtosQuery request, CancellationToken cancellationToken)
         {
 
-            var movieQuery = this.movieRepository.QueryFrom<Movie>().Include(nameof(Genre));
+            var movieQuery = this.movieRepository.QueryFrom<Movie>().Include(nameof(Genre)).Include(nameof(MediumType));
 
             if (request.GenreId != null)
             {
