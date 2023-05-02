@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,9 +45,8 @@ namespace SD.WebApp.Controllers
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
         {
-            var movieQuery = new GetMovieDtosQuery();
-            var resultAll = await this.Mediator.Send(movieQuery, cancellationToken);
-            var result = resultAll.Where(x => x.Id == id).FirstOrDefault();
+            var movieQuery = new GetMovieDtoQuery { Id = id.Value };
+            var result = await base.Mediator.Send(movieQuery, cancellationToken);
             return View(result);
 
         }
@@ -79,21 +79,25 @@ namespace SD.WebApp.Controllers
         }
 
         // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var movieQuery = new GetMovieDtoQuery { Id = id.Value };
+            var result = await base.Mediator.Send(movieQuery, cancellationToken);
+            
+            if (result == null)
             {
                 return NotFound();
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
-            ViewData["MediumTypeCode"] = new SelectList(_context.MediumTypes, "Code", "Code", movie.MediumTypeCode);
-            return View(movie);
+
+            
+            //ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
+            //ViewData["MediumTypeCode"] = new SelectList(_context.MediumTypes, "Code", "Code", movie.MediumTypeCode);
+            return View(result);
         }
 
         // POST: Movies/Edit/5

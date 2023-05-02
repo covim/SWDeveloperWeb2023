@@ -16,7 +16,10 @@ namespace SD.Application.Movies
 {
     [MapServiceDependency(nameof(MovieQueryHandler))]
     public class MovieQueryHandler : IRequestHandler<GetMovieDtoQuery, MovieDto>,
-                                        IRequestHandler<GetMovieDtosQuery, IEnumerable<MovieDto>>
+                                     IRequestHandler<GetMovieDtosQuery, IEnumerable<MovieDto>>,
+                                     IRequestHandler<GetMediumTypesQuery, IEnumerable<MediumType>>,
+                                     IRequestHandler<GetGenresQuery, IEnumerable<Genre>>
+                                            
     {
         protected readonly IMovieRepository movieRepository;
 
@@ -32,7 +35,8 @@ namespace SD.Application.Movies
 
         public async Task<MovieDto> Handle(GetMovieDtoQuery request, CancellationToken cancellationToken)
         {
-            var movie = await this.movieRepository.QueryFrom<Movie>(w => w.Id == request.Id)
+            var movie = await this.GetMovieDtoQueryWithNavigationProperties()
+                                                  .Where(w => w.Id == request.Id)
                                                   .FirstOrDefaultAsync(cancellationToken);
 
             if (movie != null)
@@ -45,10 +49,17 @@ namespace SD.Application.Movies
             }
         }
 
+        private IQueryable<Movie> GetMovieDtoQueryWithNavigationProperties()
+        {
+            return this.movieRepository.QueryFrom<Movie>()
+                                                 .Include(nameof(Genre))
+                                                 .Include(nameof(MediumType));
+        }
+
         public async Task<IEnumerable<MovieDto>> Handle(GetMovieDtosQuery request, CancellationToken cancellationToken)
         {
 
-            var movieQuery = this.movieRepository.QueryFrom<Movie>().Include(nameof(Genre)).Include(nameof(MediumType));
+            var movieQuery = GetMovieDtoQueryWithNavigationProperties();
 
             if (request.GenreId != null)
             {
@@ -72,7 +83,7 @@ namespace SD.Application.Movies
 
             // so 
             var movieDtos = await movieQuery.Select(s => MovieDto.MapFrom(s)).ToListAsync(cancellationToken);
-            
+
             /* oder
             //var movieDtos = new List<MovieDto>();
             //var movies = await movieQuery.ToListAsync(cancellationToken);
@@ -81,6 +92,16 @@ namespace SD.Application.Movies
             so */
 
             return movieDtos;
+        }
+
+        public async Task<IEnumerable<MediumType>> Handle(GetMediumTypesQuery request, CancellationToken cancellationToken)
+        {
+            return await this.movieRepository.QueryFrom<MediumType>().ToListAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Genre>> Handle(GetGenresQuery request, CancellationToken cancellationToken)
+        {
+            return await this.movieRepository.QueryFrom<Genre>().ToListAsync(cancellationToken);
         }
     }
 }
