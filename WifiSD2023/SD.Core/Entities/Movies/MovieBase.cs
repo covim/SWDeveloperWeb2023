@@ -11,6 +11,7 @@ namespace Wifi.SD.Core.Entities.Movies
 {
     public enum Ratings : byte
     {
+
         VeryBad = 1,
         Bad,
         Medium,

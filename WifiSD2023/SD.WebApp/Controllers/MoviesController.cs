@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SD.Persistence.Repositories.DBContext;
+using SD.WebApp.Extensions;
 using Wifi.SD.Core.Application.Movies.Queries;
+using Wifi.SD.Core.Application.Movies.Results;
 using Wifi.SD.Core.Entities.Movies;
 
 namespace SD.WebApp.Controllers
@@ -94,9 +96,11 @@ namespace SD.WebApp.Controllers
                 return NotFound();
             }
 
-            
+
             //ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
             //ViewData["MediumTypeCode"] = new SelectList(_context.MediumTypes, "Code", "Code", movie.MediumTypeCode);
+            await this.InitMasterDataViewData(result, cancellationToken);
+
             return View(result);
         }
 
@@ -176,9 +180,41 @@ namespace SD.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+        #region Some private helpers
+
         private bool MovieExists(Guid id)
         {
-          return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        private async Task InitMasterDataViewData(MovieDto movieDto, CancellationToken cancellationToken)
+        {
+            SelectList genreSelectList = null;
+            SelectList MediumTypeSelectList = null;
+
+
+            var genres = this.HttpContext.Session.Get<IEnumerable<Genre>>("Genres");
+            if(genres == null)
+            {
+                genres = await this.Mediator.Send(new GetGenresQuery(), cancellationToken);
+                this.HttpContext.Session.Set<IEnumerable<Genre>>("Genres", genres);
+            }
+       
+            var mediumTypes = this.HttpContext.Session.Get<IEnumerable<MediumType>>("MediumTypes");
+            if (mediumTypes == null)
+            {
+                mediumTypes = await this.Mediator.Send(new GetMediumTypesQuery(), cancellationToken);
+                this.HttpContext.Session.Set<IEnumerable<MediumType>>("MediumTypes", mediumTypes);
+            }
+
+
+            // zwei Wege .... beide Zeilen machen quasi dasselbe
+            ViewBag.Genres = new SelectList(genres, nameof(Genre.Id), nameof(Genre.Name), movieDto.GenreId);
+            ViewData.Add("MediumTypes", new SelectList(mediumTypes, nameof(MediumType.Code), nameof(MediumType.Name), movieDto.MediumTypeCode));
+        }
+
+        #endregion
     }
 }

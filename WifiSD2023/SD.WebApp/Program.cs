@@ -32,9 +32,9 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Mov
 //Broweser Spracherkennung
 builder.Services.Configure<RequestLocalizationOptions>(opts =>
 {
-    var supportedCulture = new List<CultureInfo> { 
-        new CultureInfo("en"), 
-        new CultureInfo("de") 
+    var supportedCulture = new List<CultureInfo> {
+        new CultureInfo("en"),
+        new CultureInfo("de")
     };
 
     opts.DefaultRequestCulture = new RequestCulture("de");
@@ -43,7 +43,7 @@ builder.Services.Configure<RequestLocalizationOptions>(opts =>
 });
 
 // ASP.NET MVC für lokalisierte CSHTML-Dateien konfigurieren
-builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix, 
+builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix,
     opts => { opts.ResourcesPath = "Ressources"; });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -53,6 +53,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -84,5 +91,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.UseSession();
 
 app.Run();
