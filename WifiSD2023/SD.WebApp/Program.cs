@@ -10,6 +10,9 @@ using System.Reflection;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
+using Globalization.Attributes;
+using Globalization;
+using System.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +57,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
+
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(20);
@@ -92,5 +97,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 app.UseSession();
+
+LocalizedDescriptionAttribute.Setup(new ResourceManager(typeof(BasicRes)));
 
 app.Run();

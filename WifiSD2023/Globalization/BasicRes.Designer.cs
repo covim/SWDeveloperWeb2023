@@ -178,6 +178,51 @@ namespace Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Very Bad.
+        /// </summary>
+        public static string Ratings_1 {
+            get {
+                return ResourceManager.GetString("Ratings_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad.
+        /// </summary>
+        public static string Ratings_2 {
+            get {
+                return ResourceManager.GetString("Ratings_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        public static string Ratings_3 {
+            get {
+                return ResourceManager.GetString("Ratings_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Ratings_4 {
+            get {
+                return ResourceManager.GetString("Ratings_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Very Good.
+        /// </summary>
+        public static string Ratings_5 {
+            get {
+                return ResourceManager.GetString("Ratings_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release Date.
         /// </summary>
         public static string ReleaseDate {

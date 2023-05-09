@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SD.Application.Extensions;
 using SD.Persistence.Repositories.DBContext;
 using SD.WebApp.Extensions;
 using Wifi.SD.Core.Application.Movies.Queries;
@@ -195,6 +196,7 @@ namespace SD.WebApp.Controllers
             SelectList MediumTypeSelectList = null;
 
 
+
             var genres = this.HttpContext.Session.Get<IEnumerable<Genre>>("Genres");
             if(genres == null)
             {
@@ -209,10 +211,18 @@ namespace SD.WebApp.Controllers
                 this.HttpContext.Session.Set<IEnumerable<MediumType>>("MediumTypes", mediumTypes);
             }
 
+            var localizedRatings = this.HttpContext.Session.Get<List<KeyValuePair<object, string>>>("Ratings");
+            if (localizedRatings == null)
+            {
+                localizedRatings = EnumExtension.EnumToList<Ratings>();
+                this.HttpContext.Session.Set<List<KeyValuePair<object, string>>>("Ratings", localizedRatings);
+            }
+
 
             // zwei Wege .... beide Zeilen machen quasi dasselbe
             ViewBag.Genres = new SelectList(genres, nameof(Genre.Id), nameof(Genre.Name), movieDto.GenreId);
             ViewData.Add("MediumTypes", new SelectList(mediumTypes, nameof(MediumType.Code), nameof(MediumType.Name), movieDto.MediumTypeCode));
+            ViewBag.Ratings = new SelectList(localizedRatings, "Key", "Value", movieDto.Rating);
         }
 
         #endregion

@@ -156,6 +156,21 @@
   <data name="Rating" xml:space="preserve">
     <value>Bewertung</value>
   </data>
+  <data name="Ratings_1" xml:space="preserve">
+    <value>Sau schlecht</value>
+  </data>
+  <data name="Ratings_2" xml:space="preserve">
+    <value>Schlecht</value>
+  </data>
+  <data name="Ratings_3" xml:space="preserve">
+    <value>Mol mol</value>
+  </data>
+  <data name="Ratings_4" xml:space="preserve">
+    <value>Passt</value>
+  </data>
+  <data name="Ratings_5" xml:space="preserve">
+    <value>Supr</value>
+  </data>
   <data name="ReleaseDate" xml:space="preserve">
     <value>VÖ-Datum</value>
   </data>
