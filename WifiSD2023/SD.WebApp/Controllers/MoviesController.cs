@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SD.Application.Extensions;
 using SD.Persistence.Repositories.DBContext;
 using SD.WebApp.Extensions;
+using Wifi.SD.Core.Application.Movies.Commands;
 using Wifi.SD.Core.Application.Movies.Queries;
 using Wifi.SD.Core.Application.Movies.Results;
 using Wifi.SD.Core.Entities.Movies;
@@ -30,9 +31,9 @@ namespace SD.WebApp.Controllers
         [AllowAnonymous] // würde diese methode vom Authorize ausnehmen
         public async Task<string> HelloWorld(string name)
         {
-            
-                return await Task.FromResult($"Hello {name}");
-          
+
+            return await Task.FromResult($"Hello {name}");
+
         }
 
 
@@ -91,7 +92,7 @@ namespace SD.WebApp.Controllers
 
             var movieQuery = new GetMovieDtoQuery { Id = id.Value };
             var result = await base.Mediator.Send(movieQuery, cancellationToken);
-            
+
             if (result == null)
             {
                 return NotFound();
@@ -110,36 +111,22 @@ namespace SD.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Title,ReleaseDate,Price,GenreId,MediumTypeCode,Rating")] Movie movie)
+        public async Task<IActionResult> Edit(Guid id, MovieDto movieDto, CancellationToken cancellationToken)
         {
-            if (id != movie.Id)
+            if (id != movieDto.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var command = new UpdateMovieDtoCommand() { MovieDto = movieDto, Id = id };
+                await base.Mediator.Send(command, cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
-            ViewData["MediumTypeCode"] = new SelectList(_context.MediumTypes, "Code", "Code", movie.MediumTypeCode);
-            return View(movie);
+
+            await this.InitMasterDataViewData(movieDto, cancellationToken);
+            return View(movieDto);
         }
 
         // GET: Movies/Delete/5
@@ -176,7 +163,7 @@ namespace SD.WebApp.Controllers
             {
                 _context.Movies.Remove(movie);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -198,12 +185,12 @@ namespace SD.WebApp.Controllers
 
 
             var genres = this.HttpContext.Session.Get<IEnumerable<Genre>>("Genres");
-            if(genres == null)
+            if (genres == null)
             {
                 genres = await this.Mediator.Send(new GetGenresQuery(), cancellationToken);
                 this.HttpContext.Session.Set<IEnumerable<Genre>>("Genres", genres);
             }
-       
+
             var mediumTypes = this.HttpContext.Session.Get<IEnumerable<MediumType>>("MediumTypes");
             if (mediumTypes == null)
             {
