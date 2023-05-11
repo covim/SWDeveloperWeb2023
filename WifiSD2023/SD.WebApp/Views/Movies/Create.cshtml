@@ -1,5 +1,4 @@
-﻿@model Wifi.SD.Core.Entities.Movies.Movie
-
+﻿@model MovieDto
 @{
     ViewData["Title"] = "Create";
 }
@@ -19,20 +18,28 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
+                <input class="form-control" type="date"
+                       data-val="true" data-val-required="The VÖ-Datum field is required"
+                       id="ReleaseDate" name="ReleaseDate" value="@(string.Format("{0:yyyy-MM-dd}", Model.ReleaseDate))" />
+                @*<input asp-for="ReleaseDate" class="form-control" />*@
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="GenreId" class="control-label"></label>
-                <select asp-for="GenreId" class ="form-control" asp-items="ViewBag.GenreId"></select>
+                <select asp-for="GenreId" class ="form-control" asp-items="ViewBag.Genres"></select>
             </div>
             <div class="form-group">
                 <label asp-for="MediumTypeCode" class="control-label"></label>
-                <select asp-for="MediumTypeCode" class ="form-control" asp-items="ViewBag.MediumTypeCode"></select>
+                <select asp-for="MediumTypeCode" class ="form-control" asp-items="ViewBag.MediumTypes"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
+                <select asp-for="Rating" class="form-control" asp-items="ViewBag.Ratings"></select>
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="form-group">
