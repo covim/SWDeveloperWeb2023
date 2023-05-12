@@ -20,12 +20,7 @@ namespace SD.WebApp.Controllers
     //[Authorize (Roles = "Admin")]  // so wäre der ganz controller für alle ausser Admins gesperrt
     public class MoviesController : MediatRBaseController
     {
-        private readonly MovieDbContext _context;
-
-        public MoviesController(MovieDbContext context)
-        {
-            _context = context;
-        }
+        
 
         //[Authorize]
         [AllowAnonymous] // würde diese methode vom Authorize ausnehmen
@@ -161,7 +156,12 @@ namespace SD.WebApp.Controllers
 
         private bool MovieExists(Guid id)
         {
-            return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
+            var movieDto = base.Mediator.Send(new GetMovieDtoQuery { Id = id });
+            if (movieDto != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         private async Task InitMasterDataViewData(MovieDto movieDto, CancellationToken cancellationToken)
