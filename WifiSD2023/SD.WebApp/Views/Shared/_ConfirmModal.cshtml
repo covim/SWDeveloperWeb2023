@@ -1,0 +1,27 @@
+﻿<!-- Modal Template-->
+<div class="modal fade" id="@ViewData["ModalId"]" tabindex="-1" role="dialog" aria-labeledby="ConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ConfirmModalTitle">Sind Sie sicher, dass sie diesen Eintrag löschen möchten?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@BasicRes.Close"></button>
+            </div>
+            <div class="modal-body">
+                @*Felder werden hier dynamisch eingefügt*@
+                <dl id="modalBody" class="row">
+
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@BasicRes.Close</button>
+                <div id="DeleteControls">
+                    <form asp-action="@ViewData["Action"]" asp-controller="@ViewData["Controller"]" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="Id" name="Id" />
+                        <input type="submit" value="@BasicRes.Delete" class="btn btn-secondary" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

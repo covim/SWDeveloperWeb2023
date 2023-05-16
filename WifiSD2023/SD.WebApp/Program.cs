@@ -94,7 +94,9 @@ app.UseRequestLocalization(options.Value);
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Movies}/{action=Index}/{id?}"); // Startseite auf Movies/Index umleiten
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 app.UseSession();
 

@@ -42,9 +42,9 @@ namespace SD.WebApp.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
         {
-            var movieQuery = new GetMovieDtoQuery { Id = id.Value };
+            var movieQuery = new GetMovieDtoQuery { Id = id };
             var result = await base.Mediator.Send(movieQuery, cancellationToken);
             return View(result);
 
@@ -107,7 +107,7 @@ namespace SD.WebApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] //
         public async Task<IActionResult> Edit(Guid id, MovieDto movieDto, CancellationToken cancellationToken)
         {
             if (id != movieDto.Id)
@@ -154,10 +154,10 @@ namespace SD.WebApp.Controllers
 
         #region Some private helpers
 
-        private bool MovieExists(Guid id)
+        private async Task<bool> MovieExists(Guid id, CancellationToken cancellationToken)
         {
-            var movieDto = base.Mediator.Send(new GetMovieDtoQuery { Id = id });
-            if (movieDto != null)
+            var result = await base.Mediator.Send(new GetMovieDtoQuery { Id = id }, cancellationToken);
+            if (result != null)
             {
                 return true;
             }

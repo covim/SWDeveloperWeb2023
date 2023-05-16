@@ -10,7 +10,7 @@
 <p>
     <a asp-action="Create">@BasicRes.CreateNewMovie</a>
 </p>
-<table class="table">
+<table class="table" id="MoviesTable">
     <thead>
         <tr>
             <th>
@@ -58,10 +58,24 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" data-name="Details">Details</a> |
+                    @*<a asp-action="Delete" asp-route-id="@item.Id">Delete alt</a> |*@
+                    @*<a asp-action="Delete" asp-route-id ="@item.Id" data-bs-toggle="modal" data-bs-target="#exampleModal">Modal</a>*@
+                    <a href="/Movies/Delete/@item.Id" title="@BasicRes.Delete" data-id="@item.Id" data-name="Delete">@BasicRes.Delete</a>
+
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!--Modal Dialog-->
+@(
+await Html.PartialAsync("_ConfirmModal", new ViewDataDictionary(ViewData) { { "ModalId", "ConfirmModal" }, {"Action", "Delete" }, {"Controller", "Movies" } })
+)
+
+
+@section Scripts{
+    <script src="~/js/application/MoviesIndex.js"></script>
+}
