@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GridMvc.Server;
+using GridShared;
+using GridShared.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SD.Application.Extensions;
 using SD.Persistence.Repositories.DBContext;
+using SD.WebApp.Components;
 using SD.WebApp.Extensions;
 using Wifi.SD.Core.Application.Movies.Commands;
 using Wifi.SD.Core.Application.Movies.Queries;
@@ -39,6 +43,55 @@ namespace SD.WebApp.Controllers
             var result = await base.Mediator.Send(movieQuery, cancellationToken);
             return View(result);
 
+        }
+
+        //GET: Movies, using the MVCGrid
+        public async Task<IActionResult> IndexGrid(string gridState = "",  CancellationToken cancellationToken = default)
+        {
+            string returnUrl = "/Movies/IndexGrid";
+
+            IQueryCollection query = HttpContext.Request.Query;
+
+            if (!string.IsNullOrEmpty(gridState))
+            {
+                try
+                {
+                    query = new QueryCollection(StringExtensions.GetQuery(gridState));
+                }
+                catch
+                {
+                    // do nothing, gridState was not a valide state
+                }
+    
+            }
+
+            var locale = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+            Action<IGridColumnCollection<MovieDto>> columns = c =>
+            {
+                c.Add(c => c.Title)
+                .Encoded(false)
+                .Sanitized(false)
+                .SetWidth(60)
+                .Css("hidden-xs");
+                c.Add(c => c.MediumTypeCode)
+                .Encoded(false)
+                .Sanitized(false)
+                .SetWidth(60)
+                .Css("hidden-xs");
+
+            };
+
+            var movieDtos = await this.Mediator.Send(new GetMovieDtosQuery(), cancellationToken);
+            var server = new GridServer<MovieDto>(movieDtos, query, false, "movieGrid", columns, 10, locale)
+                .Sortable()
+                .Filterable()
+                .WithMultipleFilters()
+                .Groupable()
+                .Selectable(true)
+                .SetStriped(true)
+                .ChangePageSize(true);
+
+            return View(server.Grid);
         }
 
         // GET: Movies/Details/5

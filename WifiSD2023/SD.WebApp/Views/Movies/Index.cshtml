@@ -8,7 +8,8 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">@BasicRes.CreateNewMovie</a>
+    @*<a asp-action="Create">@BasicRes.CreateNewMovie</a>*@
+    <a href="/Movies/Create" title="@BasicRes.CreateNewMovie" class="btn btn-sm btn-primary"><i class="fa-regular fa-star"></i>&nbsp;@BasicRes.CreateNewMovie</a>
 </p>
 <table class="table" id="MoviesTable">
     <thead>
@@ -57,11 +58,14 @@
                     @(item.Rating.HasValue ? EnumExtension.GetDescription(item.Rating.Value) : string.Empty)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" data-name="Details">Details</a> |
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>*@
+                    <a href="/Movies/Edit/@item.Id" title="@BasicRes.Edit" class="btn btn-sm btn-outline-info btn-custom"><i class="fa fa-pencil"></i></a>
+                    @*<a asp-action="Details" asp-route-id="@item.Id" data-name="Details">Details</a>*@
+                    <a href="/Movies/Details" title="@BasicRes.Details" data-name="Details" class="btn btn-sm btn-outline-info btn-custom"><i class="fa fa-info"></i></a>
                     @*<a asp-action="Delete" asp-route-id="@item.Id">Delete alt</a> |*@
                     @*<a asp-action="Delete" asp-route-id ="@item.Id" data-bs-toggle="modal" data-bs-target="#exampleModal">Modal</a>*@
-                    <a href="/Movies/Delete/@item.Id" title="@BasicRes.Delete" data-id="@item.Id" data-name="Delete">@BasicRes.Delete</a>
+                    @*<a href="/Movies/Delete/@item.Id" title="@BasicRes.Delete" data-id="@item.Id" data-name="Delete">@BasicRes.Delete</a>*@
+                    <a href="/Movies/Delete" title="@BasicRes.Delete" data-name="Delete" class="btn btn-sm btn-outline-danger btn-custom"><i class="fa-solid fa-trash"></i></a>
 
 
                 </td>
